@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DB Master AI - Input</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body class="p-6 md:p-12">
+    <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Database Master AI</h1>
+            <p class="text-slate-400 mt-4 italic uppercase tracking-widest">Stage 1: Project Definition</p>
+        </div>
+
+        <form action="/analyze" method="POST" class="glass-card">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Project Domain</label>
+                    <input type="text" name="domain" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-blue-500" placeholder="e.g. E-Commerce System" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Primary Entity</label>
+                    <input type="text" name="primary_entity" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-blue-500" placeholder="e.g. Products" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Constraints / Rules</label>
+                    <textarea name="constraints" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Business rules and limitations..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Advanced Features</label>
+                    <textarea name="advanced" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Triggers or automated tasks..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Security / Access Control</label>
+                    <textarea name="security" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="User roles and permissions..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-blue-300 mb-2">Reporting Requirements</label>
+                    <textarea name="reporting" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Queries and reports needed..."></textarea>
+                </div>
+            </div>
+            <div class="mb-8">
+                <label class="block text-sm font-bold text-blue-300 mb-2">Common Tasks</label>
+                <textarea name="tasks" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Daily operations like adding/deleting..."></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-4 rounded-2xl font-black text-xl shadow-2xl transition-all">GENERATE ARCHITECTURE 🚀</button>
+        </form>
+    </div>
+</body>
+</html>

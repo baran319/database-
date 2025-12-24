@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ domain }} - Architecture Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'neutral', 
+            securityLevel: 'loose',
+            er: { useMaxWidth: true, padding: 20 } 
+        });
+    </script>
+</head>
+<body class="p-4 md:p-12">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6 no-print">
+            <div>
+                <span class="text-xs font-bold text-blue-400 tracking-widest uppercase">Database Design Report</span>
+                <h2 class="text-4xl font-black text-white mt-1 uppercase">{{ domain }}</h2>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="window.print()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    EXPORT PDF
+                </button>
+                <a href="/" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-2xl font-bold transition-all border border-slate-700">
+                    🏠 BACK TO HOME
+                </a>
+            </div>
+        </div>
+
+        <div class="glass-card shadow-2xl">
+            <div id="report-content">
+                {{ content | safe }}
+            </div>
+        </div>
+
+        <div class="text-center py-10 no-print">
+            <p class="text-slate-500 text-sm">© 2025 Database Master AI | Academic Project [cite: 8]</p>
+        </div>
+    </div>
+
+    <script>
+        // Mermaid render kontrolü (İçerik yüklendikten sonra çalışır)
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                mermaid.run();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
