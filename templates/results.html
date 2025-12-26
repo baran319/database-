@@ -3,57 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ domain }} - Architecture Report</title>
+    <title>{{ domain }} - Database Architecture Report</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
     <script>
+        // Mermaid'i sayfa başında yapılandırıyoruz
         mermaid.initialize({ 
-            startOnLoad: true, 
-            theme: 'neutral', 
+            startOnLoad: false, 
+            theme: 'dark', 
             securityLevel: 'loose',
-            er: { useMaxWidth: true, padding: 20 } 
+            fontFamily: 'Plus Jakarta Sans',
+            er: { useMaxWidth: true, layoutDirection: 'TB' }
         });
     </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle at top right, #0f172a, #020617); 
+            color: #cbd5e1;
+            scroll-behavior: smooth;
+        }
+
+        /* Glassmorphism efekti */
+        .glass-card { 
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .nav-btn { 
+            color: #94a3b8; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .active-btn { 
+            background: #2563eb !important; 
+            color: white !important; 
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); 
+            border-color: #3b82f6;
+        }
+
+        /* Tablo Stilleri */
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: rgba(15, 23, 42, 0.4); border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        th { background: rgba(30, 41, 59, 0.8); padding: 1rem; text-align: left; color: #60a5fa; border-bottom: 2px solid #334155; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 1rem; border-bottom: 1px solid rgba(30, 41, 59, 0.5); font-size: 0.9rem; color: #cbd5e1; }
+        tr:hover { background: rgba(51, 65, 85, 0.2); }
+
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media print { .no-print { display: none; } }
+    </style>
 </head>
-<body class="p-4 md:p-12">
+<body class="p-4 md:p-8 min-h-screen relative">
+
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-slate-950/95 z-[100] flex flex-col items-center justify-center">
+        <div class="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <h2 id="loading-text" class="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Updating System</h2>
+        <p class="text-slate-400 animate-pulse italic">AI is processing logic...</p>
+    </div>
+
     <div class="max-w-6xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6 no-print">
+        <div class="flex justify-between items-center mb-8 no-print">
             <div>
-                <span class="text-xs font-bold text-blue-400 tracking-widest uppercase">Database Design Report</span>
-                <h2 class="text-4xl font-black text-white mt-1 uppercase">{{ domain }}</h2>
+                <span class="text-blue-500 font-bold uppercase tracking-widest text-xs">Architectural Design</span>
+                <h2 class="text-3xl font-black text-white uppercase tracking-tighter">{{ domain }}</h2>
             </div>
-            <div class="flex gap-4">
-                <button onclick="window.print()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                    </svg>
-                    EXPORT PDF
-                </button>
-                <a href="/" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-2xl font-bold transition-all border border-slate-700">
-                    🏠 BACK TO HOME
-                </a>
+            <div class="flex gap-2">
+                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all transform active:scale-95">EXPORT PDF</button>
+                <a href="/" class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl font-bold border border-slate-700 transition-all">NEW PROJECT</a>
             </div>
         </div>
 
-        <div class="glass-card shadow-2xl">
-            <div id="report-content">
+        <div class="flex flex-wrap gap-2 mb-6 no-print bg-slate-900/50 p-3 rounded-2xl border border-slate-800 sticky top-4 z-50 backdrop-blur-md">
+            <button onclick="showStage('stage1', this)" class="nav-btn active-btn px-4 py-2 rounded-lg font-bold">1. Summary</button>
+            <button onclick="showStage('stage2', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">2. Rules</button>
+            <button onclick="showStage('stage3', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">3. Tables</button>
+            <button onclick="showStage('stage4', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">4. Gaps</button>
+            <button onclick="showStage('stage5', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">5. Normalization</button>
+            <button onclick="showStage('stage6', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">6. ERD</button>
+            <button onclick="showStage('stage7', this)" class="nav-btn px-4 py-2 rounded-lg font-bold">7. SQL</button>
+        </div>
+
+        <div class="glass-card shadow-2xl min-h-[70vh] rounded-3xl overflow-hidden border border-white/5">
+            <div id="report-content" class="p-6 md:p-10">
                 {{ content | safe }}
             </div>
         </div>
+    </div>
 
-        <div class="text-center py-10 no-print">
-            <p class="text-slate-500 text-sm">© 2025 Database Master AI | Academic Project [cite: 8]</p>
-        </div>
+    <div class="fixed bottom-8 right-8 z-50 no-print group">
+        <div class="absolute inset-0 bg-red-600 rounded-full blur opacity-40 group-hover:opacity-75 transition-opacity duration-500"></div>
+        <button onclick="deployToXampp()" class="relative flex items-center gap-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-bold py-4 px-8 rounded-full shadow-2xl transition-all transform hover:scale-105 border-2 border-red-400/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+            <span class="tracking-wider">DEPLOY TO XAMPP</span>
+        </button>
     </div>
 
     <script>
-        // Mermaid render kontrolü (İçerik yüklendikten sonra çalışır)
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                mermaid.run();
-            }, 500);
-        });
+        const pDataString = '{{ p_data_json | safe }}';
+
+        // Mermaid Render Motoru (Kritik Alan)
+        async function renderMermaid() {
+            const srcEl = document.querySelector('.mermaid-src');
+            const targetEl = document.querySelector('.mermaid-target');
+            if (!srcEl || !targetEl) return;
+
+            // HTML karakterlerini ve gereksiz boşlukları temizle
+            let code = srcEl.textContent
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .replace(/```mermaid/g, '')
+                .replace(/```/g, '')
+                .trim();
+
+            // Kodun başında erDiagram olduğundan emin ol
+            if (!code.startsWith('erDiagram')) {
+                const fixPos = code.indexOf('erDiagram');
+                if (fixPos !== -1) code = code.substring(fixPos);
+                else code = 'erDiagram\n' + code;
+            }
+
+            // Target'ı temizle ve kodu bas
+            targetEl.innerHTML = `<div class="mermaid">${code}</div>`;
+            
+            try {
+                // Mermaid motorunu çalıştır
+                await mermaid.run({
+                    nodes: targetEl.querySelectorAll('.mermaid')
+                });
+            } catch (err) {
+                console.error("Mermaid Render Error:", err);
+                targetEl.innerHTML = `
+                    <div class="p-6 bg-red-900/20 text-red-400 rounded-2xl border border-red-500/50">
+                        <p class="font-bold">Diagram Error</p>
+                        <p class="text-xs opacity-70">Syntax Error in AI output. Try clicking "FIX IT" to regenerate.</p>
+                    </div>`;
+            }
+        }
+
+        // Navigasyon Mantığı
+        function showStage(stageId, btn) {
+            // Tüm aşamaları gizle
+            document.querySelectorAll('[id^="stage"]').forEach(s => s.style.display = 'none');
+            
+            // Hedef aşamayı göster
+            const target = document.getElementById(stageId);
+            if (target) {
+                target.style.display = 'block';
+                target.classList.add('fade-in');
+            }
+
+            // Buton durumlarını güncelle
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
+            if (btn) btn.classList.add('active-btn');
+
+            // Eğer ERD sekmesindeysek diyagramı çiz
+            if (stageId === 'stage6') {
+                setTimeout(renderMermaid, 100);
+            }
+        }
+
+        // FIX IT butonu tıklandığında çalışan AJAX fonksiyonu
+        window.fixMissingRule = async function(ruleText) {
+            document.getElementById('loading-text').innerText = "Updating System";
+            document.getElementById('loading-overlay').classList.remove('hidden');
+
+            try {
+                const projectData = JSON.parse(pDataString);
+                const response = await fetch('/fix_rule', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        p_data: projectData,
+                        rule: ruleText
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // İçeriği güncelle
+                    document.getElementById('report-content').innerHTML = result.new_content;
+                    
+                    // DOM güncellendikten sonra Mermaid'i çiz ve Stage 6'ya odaklan
+                    setTimeout(() => {
+                        renderMermaid();
+                        const erdBtn = document.querySelectorAll('.nav-btn')[5]; // Stage 6 butonu
+                        showStage('stage6', erdBtn);
+                    }, 300);
+
+                    alert(`✅ Kural Eklendi: "${ruleText}"\nSistem yeniden yapılandırıldı.`);
+
+                } else {
+                    alert("Fix failed: " + result.message);
+                }
+            } catch (error) {
+                console.error("AJAX Error:", error);
+                alert("Connection lost. Please try again.");
+            } finally {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
+        };
+
+        // --- YENİ EKLENEN: XAMPP DEPLOYMENT FONKSİYONU ---
+        window.deployToXampp = async function() {
+            if(!confirm("⚠️ DİKKAT!\n\nBu işlem XAMPP veritabanına bağlanacak ve:\n1. Tabloları oluşturacak,\n2. Business Rule'ları kaydedecek.\n\nDevam edilsin mi?")) return;
+
+            // Yükleniyor ekranını aç
+            document.getElementById('loading-text').innerText = "Deploying to XAMPP";
+            document.getElementById('loading-overlay').classList.remove('hidden');
+
+            try {
+                // 1. Stage 7'deki SQL Kodlarını Topla
+                let sqlContent = "";
+                document.querySelectorAll('#stage7 pre').forEach(pre => {
+                    sqlContent += pre.innerText + "\n";
+                });
+
+                // 2. Stage 2'deki Business Rule'ları Topla (Fix edilenler dahil!)
+                let rules = [];
+                document.querySelectorAll('#stage2 table tbody tr').forEach(tr => {
+                    let cols = tr.querySelectorAll('td');
+                    if(cols.length >= 2) {
+                        rules.push({
+                            id: cols[0].innerText.trim(),  // ID
+                            desc: cols[1].innerText.trim() // Description
+                        });
+                    }
+                });
+
+                // 3. Veritabanı ismini domain'den türet
+                let domainName = "{{ domain }}".trim() || "my_project";
+                let dbName = domainName.toLowerCase()
+                    .replace(/ /g, '_')
+                    .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u') 
+                    + "_db";
+
+                // 4. Backend'e Gönder
+                const response = await fetch('/deploy_to_xampp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        sql_code: sqlContent,
+                        business_rules: rules,
+                        db_name: dbName
+                    })
+                });
+
+                const result = await response.json();
+
+                if(result.status === 'success') {
+                    alert("🎉 BAŞARILI!\n\n" + result.message + "\n\nVeritabanı XAMPP üzerinde oluşturuldu.");
+                } else {
+                    alert("❌ HATA: " + result.message);
+                }
+
+            } catch (err) {
+                alert("Sistem Hatası: " + err);
+            } finally {
+                // Yükleniyor ekranını kapat
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
+        }
+
+        // Sayfa açıldığında 1. aşamayı göster
+        window.onload = () => {
+            showStage('stage1', document.querySelector('.nav-btn'));
+        };
     </script>
 </body>
 </html>

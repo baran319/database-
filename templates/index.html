@@ -2,50 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DB Master AI - Input</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        /* Modern Cam Efekti ve Geçişler */
+        .glass-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); border-radius: 1.5rem; }
+        .template-card { cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.03); }
+        .template-card:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); transform: translateY(-3px); }
+        body { background: radial-gradient(circle at top right, #0f172a, #020617); }
+        
+        /* Input Odak Efekti */
+        input:focus, textarea:focus { border-color: #3b82f6 !important; box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+    </style>
 </head>
-<body class="p-6 md:p-12">
-    <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Database Master AI</h1>
-            <p class="text-slate-400 mt-4 italic uppercase tracking-widest">Stage 1: Project Definition</p>
+<body class="bg-slate-950 p-6 md:p-12 min-h-screen flex items-center justify-center">
+    <div class="max-w-5xl w-full mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 pb-2">
+                Database Master AI
+            </h1>
+            <p class="text-slate-400 mt-4 italic uppercase tracking-widest font-bold">Stage 1: Project Definition</p>
         </div>
 
-        <form action="/analyze" method="POST" class="glass-card">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-2xl mx-auto">
+            <div onclick="fillForm('ecommerce')" class="template-card glass-card p-6">
+                <div class="text-4xl mb-3">🛍️</div>
+                <h3 class="font-black text-blue-400 text-lg uppercase">E-Commerce System</h3>
+                <p class="text-xs text-slate-500 mt-1">Orders, Inventory & Payments</p>
+            </div>
+            <div onclick="fillForm('hospital')" class="template-card glass-card p-6">
+                <div class="text-4xl mb-3">🏥</div>
+                <h3 class="font-black text-emerald-400 text-lg uppercase">Hospital CRM</h3>
+                <p class="text-xs text-slate-500 mt-1">Patients, Doctors & Records</p>
+            </div>
+        </div>
+
+        <form action="/analyze" method="POST" class="glass-card p-8 shadow-2xl">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Project Domain</label>
-                    <input type="text" name="domain" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-blue-500" placeholder="e.g. E-Commerce System" required>
+                <div class="md:col-span-1">
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Project Domain</label>
+                    <input type="text" id="domain" name="domain" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                           placeholder="e.g. Global E-Commerce & Marketplace" required>
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Primary Entity</label>
+                    <input type="text" id="primary_entity" name="primary_entity" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                           placeholder="e.g. Products, Orders, Customers" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Primary Entity</label>
-                    <input type="text" name="primary_entity" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:border-blue-500" placeholder="e.g. Products" required>
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Constraints / Rules</label>
+                    <textarea id="constraints" name="constraints" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                              placeholder="Business rules (e.g. Stock must be > 0)"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Constraints / Rules</label>
-                    <textarea name="constraints" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Business rules and limitations..."></textarea>
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Advanced Features</label>
+                    <textarea id="advanced" name="advanced" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                              placeholder="Triggers, Views, Procedures..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Advanced Features</label>
-                    <textarea name="advanced" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Triggers or automated tasks..."></textarea>
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Security / Access Control</label>
+                    <textarea id="security" name="security" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                              placeholder="User Roles (Admin, Staff, Customer)..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Security / Access Control</label>
-                    <textarea name="security" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="User roles and permissions..."></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-blue-300 mb-2">Reporting Requirements</label>
-                    <textarea name="reporting" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Queries and reports needed..."></textarea>
+                    <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Reporting Requirements</label>
+                    <textarea id="reporting" name="reporting" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                              placeholder="Monthly revenue, Top users..."></textarea>
                 </div>
             </div>
+            
             <div class="mb-8">
-                <label class="block text-sm font-bold text-blue-300 mb-2">Common Tasks</label>
-                <textarea name="tasks" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white" placeholder="Daily operations like adding/deleting..."></textarea>
+                <label class="block text-xs font-black text-blue-300 mb-2 uppercase tracking-wider">Common Tasks</label>
+                <textarea id="tasks" name="tasks" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none transition" 
+                          placeholder="Daily operations like 'Updating stock' or 'Booking'"></textarea>
             </div>
-            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-4 rounded-2xl font-black text-xl shadow-2xl transition-all">GENERATE ARCHITECTURE 🚀</button>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-5 rounded-2xl font-black text-xl shadow-2xl transition-all transform hover:-translate-y-1 active:scale-95">
+                GENERATE ARCHITECTURE 🚀
+            </button>
         </form>
     </div>
+
+    <script>
+        const templates = {
+            ecommerce: {
+                domain: "Global E-Commerce & Marketplace",
+                primary_entity: "Products, Orders, Customers",
+                constraints: "1. Stock must be checked before order completion. 2. A customer can have multiple addresses. 3. Discount codes apply to the total amount.",
+                advanced: "1. Low stock trigger: Notify admin when stock < 5. 2. View: Monthly sales performance dashboard.",
+                security: "1. Customers: Manage their own profile. 2. Sellers: Manage their own inventory. 3. Admins: Full financial control.",
+                reporting: "1. Top 5 selling products by category. 2. Monthly revenue per region.",
+                tasks: "1. Processing new orders. 2. Updating stock levels. 3. Generating shipment labels."
+            },
+            hospital: {
+                domain: "Multi-Specialty Hospital Management",
+                primary_entity: "Patients, Doctors, Appointments",
+                constraints: "1. Doctors cannot have overlapping appointments. 2. Prescriptions must be linked to a consultation. 3. Patients must have unique National IDs.",
+                advanced: "1. Auto-reminder: Send SMS 2 hours before appointment. 2. View: Daily room occupancy rate.",
+                security: "1. Doctors: Access medical history. 2. Nurses: Record vital signs. 3. Billing: Only access payment records.",
+                reporting: "1. Average patient waiting time per clinic. 2. Surgeon success rate analysis.",
+                tasks: "1. Registering new patient. 2. Booking consultation. 3. Issuing discharge summary."
+            }
+        };
+
+        function fillForm(type) {
+            const data = templates[type];
+            document.getElementById('domain').value = data.domain;
+            document.getElementById('primary_entity').value = data.primary_entity;
+            document.getElementById('constraints').value = data.constraints;
+            document.getElementById('advanced').value = data.advanced;
+            document.getElementById('security').value = data.security;
+            document.getElementById('reporting').value = data.reporting;
+            document.getElementById('tasks').value = data.tasks;
+            
+            // Kullanıcıyı forma yönlendir
+            window.scrollTo({ top: document.querySelector('form').offsetTop - 20, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>

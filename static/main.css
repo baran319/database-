@@ -1,18 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
-/* DEĞİŞKENLER: Tamamen Koyu ve Modern Tonlar */
+/* TASARIM DEĞİŞKENLERİ VE RENK PALETİ */
 :root {
-    --primary: #38bdf8;         /* Neon Mavi - Başlıklar ve Vurgular */
-    --secondary: #818cf8;       /* İndigo - İkincil Vurgular */
-    --accent: #10b981;          /* Zümrüt - SQL Kodları */
+    --primary: #38bdf8;         /* Canlı Mavi */
+    --primary-hover: #0ea5e9;
+    --accent: #10b981;          /* SQL ve Başarı Rengi */
+    --danger: #f43f5e;          /* Hata/Kısıtlama Rengi */
     --bg-dark: #020617;         /* Ana Arka Plan */
-    --card-bg: rgba(15, 23, 42, 0.9); /* Cam Kart Arka Planı */
-    --border: rgba(56, 189, 248, 0.25); /* Neon Çerçeve */
-    --header-bg: #1e293b;       /* Tablo Başlık Arka Planı */
-    --row-bg: rgba(30, 41, 59, 0.6);   /* Tablo Satır Arka Planı */
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --border: rgba(56, 189, 248, 0.15);
+    --row-hover: rgba(56, 189, 248, 0.05);
+    --amber: #f59e0b;           /* Normalizasyon uyarısı */
+    --purple: #a855f7;          /* 3NF Rengi */
 }
 
-/* GENEL SAYFA TASARIMI */
+/* GENEL SIFIRLAMA VE SAYFA AYARLARI */
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif; 
     background: radial-gradient(circle at top right, #0f172a, #020617);
@@ -20,54 +23,96 @@ body {
     margin: 0;
     line-height: 1.6;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* ANA RAPOR KARTI (Glassmorphism) */
+/* CONTAINER VE ANA PANEL */
+.max-w-6xl {
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .glass-card {
     background: var(--card-bg);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     border-radius: 32px;
-    padding: 3.5rem;
-    margin-bottom: 3rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    animation: fadeIn 0.8s ease-out;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    margin-top: 1rem;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+/* BAŞLIKLAR */
+h1, h2, h3, h4 {
+    letter-spacing: -0.025em;
+    font-weight: 800;
 }
 
-/* STAGE BAŞLIKLARI: Silinen Başlıkları Geri Getiren ve Vurgulayan Bölüm */
 h3 {
-    color: var(--primary) !important;
-    font-size: 2rem !important; /* Büyük ve Heybetli */
-    font-weight: 800 !important;
-    margin-top: 4.5rem !important;
-    margin-bottom: 2rem !important;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 12px;
-}
-
-h3::before {
-    content: "⚡"; /* Stage olduğunu belirten ikon */
-    font-size: 1.5rem;
-}
-
-h4 {
-    color: var(--secondary);
-    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.75rem;
     margin-top: 2rem;
-    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    text-transform: uppercase;
 }
 
-/* TABLO TASARIMI: Beyazlıklar Tamamen Giderildi */
+/* NAVİGASYON BUTONLARI */
+.nav-btn {
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(30, 41, 59, 0.4);
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.nav-btn:hover {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.active-btn {
+    background: var(--primary) !important;
+    color: var(--bg-dark) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
+}
+
+/* FIX IT BUTONU (EKLEME YAPILDI) */
+.fix-btn {
+    background: linear-gradient(135deg, var(--accent) 0%, #059669 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.fix-btn:hover {
+    transform: scale(1.05) translateY(-1px);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+    filter: brightness(1.1);
+}
+
+/* TABLO TASARIMI */
 table { 
     width: 100%; 
     border-collapse: separate; 
@@ -76,56 +121,57 @@ table {
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid var(--border);
-    background: rgba(15, 23, 42, 0.3);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 th { 
-    background: var(--header-bg) !important; 
+    background: #1e293b !important; 
     color: var(--primary) !important; 
-    padding: 20px; 
+    padding: 18px; 
     text-align: left; 
     font-size: 0.8rem; 
-    font-weight: 700;
-    text-transform: uppercase; 
-    letter-spacing: 1.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     border-bottom: 2px solid var(--border);
 }
 
 td { 
-    background: var(--row-bg) !important; 
-    padding: 16px 20px; 
+    padding: 16px; 
     font-size: 0.95rem; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     color: #cbd5e1;
+    vertical-align: top;
 }
 
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(56, 189, 248, 0.1) !important; }
-
-/* ER DİYAGRAM (STAGE 6) KOYU ALAN */
-.mermaid {
-    background: #0f172a !important; 
-    padding: 3rem;
-    border-radius: 24px;
-    margin: 3rem 0;
-    border: 2px solid var(--border);
-    display: flex;
-    justify-content: center;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+tr:hover td {
+    background: var(--row-hover) !important;
 }
 
-/* SQL KOD BLOĞU (STAGE 7) */
+/* NORMALİZASYON ÖZEL STİLLERİ */
+.normalization-logic {
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px dashed var(--primary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0 2.5rem 0;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+/* SQL KODLARI VE PRE TAGLARI */
 pre { 
-    background: #000 !important; 
+    background: #000000 !important; 
     padding: 30px; 
     border-radius: 20px; 
     color: var(--accent) !important; 
     border: 1px solid #1e293b;
-    font-family: 'Fira Code', 'Courier New', monospace;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
     font-size: 0.9rem;
     line-height: 1.7;
     position: relative;
     overflow-x: auto;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
 }
 
 pre::before {
@@ -134,18 +180,80 @@ pre::before {
     top: 0; right: 25px;
     font-size: 0.65rem;
     background: #1e293b;
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 0 0 10px 10px;
     color: #94a3b8;
+    font-weight: 800;
 }
 
-/* Yazdırma Ayarları (Hoca için PDF Alırken) */
+/* ER DİYAGRAMI (MERMAID) */
+.mermaid {
+    background: #0f172a !important; 
+    padding: 3rem;
+    border-radius: 24px;
+    margin: 2rem 0;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+}
+
+/* LOADING OVERLAY (YENİ EKLENDİ) */
+#loading-overlay {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.5s ease;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ANİMASYONLAR */
+.fade-in {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* FORM ELEMENTLERİ */
+input, textarea {
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+/* HOCA İÇİN PDF VE YAZDIRMA AYARLARI */
 @media print { 
-    .no-print { display: none; } 
+    .no-print { display: none !important; } 
     body { background: white !important; color: black !important; }
-    .glass-card { border: none; box-shadow: none; padding: 0; background: white; }
+    .glass-card { border: none; box-shadow: none; padding: 0; background: white; width: 100%; }
+    #stage1, #stage2, #stage3, #stage4, #stage5, #stage6, #stage7 { 
+        display: block !important; 
+        page-break-after: always;
+        opacity: 1 !important;
+        margin-bottom: 2rem;
+    }
     th { background: #f1f5f9 !important; color: black !important; border: 1px solid #cbd5e1 !important; }
     td { background: white !important; color: black !important; border: 1px solid #e2e8f0 !important; }
-    .mermaid { background: white !important; border: 1px solid #ccc; filter: none; }
-    h3 { color: black !important; border-bottom: 2px solid black !important; }
+    h3 { border-left: 5px solid black; color: black !important; }
+    pre { background: #f8fafc !important; color: #166534 !important; border: 1px solid #e2e8f0; }
 }
+
+/* SCROLLBAR TASARIMI */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
